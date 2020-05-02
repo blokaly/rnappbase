@@ -1,28 +1,26 @@
 import React from 'react'
-import { AppRegistry } from 'react-native';
-import { Root } from "native-base";
+import {AppRegistry} from 'react-native';
+import {Root} from "native-base";
 import App from './app/index';
 import {name as appName} from './app.json';
-import { Provider } from 'react-redux'
-import { applyMiddleware, createStore } from 'redux'
-import { createLogger } from 'redux-logger'
-import thunk from 'redux-thunk'
-import rootReducer from './app/redux/reducers'
+import {Provider} from 'react-redux'
+import {PersistGate} from "redux-persist/es/integration/react";
+import configureStore from './app/config/store'
 
-const logger = createLogger();
-const store = createStore(
-  rootReducer,
-  applyMiddleware(thunk, logger)
-);
-
+const {persistor, store} = configureStore();
 
 const app = () => {
   return (
 
     <Provider store={store}>
-      <Root>
-        <App />
-      </Root>
+      <PersistGate
+        loading={null}
+        onBeforeLift={()=>{}}
+        persistor={persistor}>
+        <Root>
+          <App />
+        </Root>
+      </PersistGate>
     </Provider>
   )
 };
